@@ -1,0 +1,36 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{BD40CF5B-D9F4-4669-9BC9-72BA252D719F}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="ZibelDMVC.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="ZibelDMVC">
+        <MSBuild Projects="ZibelDMVC.dproj"/>
+    </Target>
+    <Target Name="ZibelDMVC:Clean">
+        <MSBuild Projects="ZibelDMVC.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ZibelDMVC:Make">
+        <MSBuild Projects="ZibelDMVC.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="ZibelDMVC"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="ZibelDMVC:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="ZibelDMVC:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
