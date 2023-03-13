@@ -9,11 +9,9 @@ uses
 type
   TEMail = class
     FMailFrom: string;
-    FMailSubject: string;
     FMailBody: string;
   public
     property MailFrom: string read FMailFrom write FMailFrom;
-    property MailSubject: string read FMailSubject write FMailSubject;
     property MailBody: string read FMailBody write FMailBody;
   end;
 
@@ -45,21 +43,27 @@ function TZibelController.EnviarEmail(pEmail: TEMail): boolean;
 var
   SMTP: TIdSMTP;
   Msg: TIdMessage;
+const // parametros do smtp
+  smtpHost: string = '';
+  smtpPort: Integer = 587;
+  smtpUser: string = '';
+  smtpPass: string = '';
 begin
+  // faz envio de email de contato
   Result := False;
   Msg := TIdMessage.Create(nil);
   try
-    Msg.From.Address := '';
-    Msg.Recipients.EMailAddresses := '';
+    Msg.From.Address := smtpUser;
+    Msg.Recipients.EMailAddresses := pEmail.FMailFrom;
     Msg.Body.Text := pEmail.MailBody;
-    Msg.Subject := 'SendMail from Zibel Tecnologia as ' + pEmail.FMailFrom;
+    Msg.Subject := 'zibeltecnologia.com.br - ' + pEmail.FMailFrom;
     SMTP := TIdSMTP.Create(nil);
     try
-      SMTP.Host := '';
-      SMTP.Port := 587;
+      SMTP.Host := smtpHost;
+      SMTP.Port := smtpPort;
       SMTP.AuthType := satDefault;
-      SMTP.Username := '';
-      SMTP.Password := '';
+      SMTP.Username := smtpUser;
+      SMTP.Password := smtpPass;
       SMTP.Connect;
       SMTP.Send(Msg);
       Result := True;
@@ -95,6 +99,7 @@ procedure TZibelController.SendMail;
 var
   oEmail: TEMail;
 begin
+  // recebe um objeto com From e Body
   oEmail := Context.Request.BodyAs<TEMail>;
   if EnviarEmail(oEmail)
   then Render(201, 'DelphiMVCFramework SendMail Success')
